@@ -1,0 +1,2520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelEase - Discover Your Next Adventure</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { 
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1a1a1a;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #f8f9fa 0%, #eef7ff 100%);
+        }
+
+        :root {
+            --primary: #0066cc;
+            --secondary: #009688;
+            --accent: #2ecc71;
+            --success: #27ae60;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --gradient: linear-gradient(135deg, #0066cc 0%, #009688 100%);
+            --gradient-dark: linear-gradient(135deg, #004d99 0%, #00796b 100%);
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .btn-login {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 102, 204, 0.2);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3);
+        }
+
+        .user-menu {
+            display: none;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 102, 204, 0.2);
+            transition: all 0.3s ease;
+            border: 3px solid white;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 102, 204, 0.3);
+        }
+
+        .search-results-section {
+            padding: 60px 0;
+            background: white;
+            display: none;
+        }
+
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-count {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid var(--gray-light);
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            color: var(--gray);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-btn:hover:not(.active) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .booking-modal .modal-content {
+            border-radius: 16px;
+            overflow: hidden;
+            border: none;
+        }
+
+        .booking-modal .modal-header {
+            background: var(--gradient);
+            color: white;
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+
+        .booking-modal .modal-body {
+            padding: 2rem;
+            background: var(--light);
+        }
+
+        .tour-package {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tour-package:hover {
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.1);
+        }
+
+        .tour-package.selected {
+            border-color: var(--primary);
+            background: rgba(0, 102, 204, 0.05);
+        }
+
+        .package-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .rupee-symbol {
+            font-family: 'Arial', sans-serif;
+            margin-right: 2px;
+        }
+
+        .my-tours-section {
+            padding: 80px 0;
+            background: var(--light);
+            min-height: 70vh;
+        }
+
+        .tabs-navigation {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(0, 102, 204, 0.1);
+            color: var(--primary);
+        }
+
+        .tour-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid var(--primary);
+        }
+
+        .tour-card.upcoming {
+            border-left-color: var(--success);
+        }
+
+        .tour-card.current {
+            border-left-color: var(--warning);
+        }
+
+        .tour-card.past {
+            border-left-color: var(--gray);
+        }
+
+        .tour-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-upcoming {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+        }
+
+        .status-current {
+            background: rgba(241, 196, 15, 0.1);
+            color: #b7950b;
+        }
+
+        .status-past {
+            background: rgba(108, 117, 125, 0.1);
+            color: var(--gray);
+        }
+
+        .booking-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+        }
+
+        .section-label {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .booking-container {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            display: block;
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+            width: 100%;
+            background: white;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+            outline: none;
+        }
+
+        .date-input-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .date-input {
+            flex: 1;
+        }
+
+        .date-input .form-control {
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%230066cc' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+            background-size: 16px;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+
+        .traveler-counter {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .counter-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--light);
+            border: none;
+            border-radius: 6px;
+            color: var(--primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .counter-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .counter-display {
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .btn-search {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.2);
+        }
+
+        .btn-search:hover {
+            background: var(--gradient-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 102, 204, 0.3);
+        }
+
+        .form-icon {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            margin-bottom: 1.5rem;
+            position: relative;
+            border: 1px solid var(--gray-light);
+        }
+
+        .result-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary);
+        }
+
+        .result-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .result-info {
+            padding: 1.5rem;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .result-location {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .result-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-badge {
+            background: rgba(0, 102, 204, 0.1);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .btn-book-result {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-book-result:hover {
+            background: var(--secondary);
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        .btn-primary-hero {
+            background: white;
+            color: var(--primary);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-primary-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            color: var(--primary);
+        }
+
+        .destinations-section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .destination-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            margin-bottom: 1.5rem;
+            position: relative;
+            border: 1px solid var(--gray-light);
+        }
+
+        .destination-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary);
+        }
+
+        .destination-image {
+            height: 220px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .destination-info {
+            padding: 1.5rem;
+        }
+
+        .destination-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .destination-location {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .destination-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .badge-popular {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .btn-book {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-book:hover {
+            background: var(--secondary);
+        }
+
+        .footer {
+            background: var(--dark);
+            color: #e5e7eb;
+            padding: 60px 0 30px;
+        }
+
+        .footer-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .notification.info {
+            background: var(--primary);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .modal-tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .modal-tab.active {
+            color: var(--primary);
+        }
+
+        .modal-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .payment-section {
+            padding: 2rem 0;
+            display: none;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .payment-method {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 102, 204, 0.1);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary);
+            background: rgba(0, 102, 204, 0.05);
+            box-shadow: 0 8px 25px rgba(0, 102, 204, 0.1);
+        }
+
+        .payment-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .payment-details {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .upi-apps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .upi-app {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upi-app:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .upi-app.selected {
+            border-color: var(--accent);
+            background: rgba(46, 204, 113, 0.1);
+        }
+
+        .card-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-control-card {
+            padding: 0.75rem 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control-card:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+            outline: none;
+        }
+
+        .payment-summary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #eef7ff 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 2px solid rgba(0, 102, 204, 0.1);
+        }
+
+        .upi-pin-section, .otp-section {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .btn-pay {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.2);
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 102, 204, 0.3);
+        }
+
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem;
+            min-width: 180px;
+            display: none;
+            z-index: 1001;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            color: var(--dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(0, 102, 204, 0.1);
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .booking-container {
+                padding: 1.5rem;
+            }
+            
+            .tabs-navigation {
+                flex-wrap: wrap;
+            }
+            
+            .date-input-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .search-results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-plane-departure me-2"></i>TravelEase</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#booking-section">Book Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#destinations">Destinations</a>
+                    </li>
+                    <!-- My Tours Link - Visible only when logged in -->
+                    <li class="nav-item" id="myToursNavItem" style="display: none;">
+                        <a class="nav-link" href="#my-tours">My Tours</a>
+                    </li>
+                    <!-- Login Button - Hidden when logged in -->
+                    <li class="nav-item ms-3" id="loginButtonContainer">
+                        <button class="btn btn-login" data-bs-toggle="modal" data-bs-target="#authModal">
+                            <i class="fas fa-user me-2"></i>Login/Register
+                        </button>
+                    </li>
+                    <!-- User Menu - Visible only when logged in -->
+                    <li class="nav-item ms-3 user-menu" id="userMenuContainer">
+                        <div class="profile-dropdown">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <div class="dropdown-menu" id="userDropdown">
+                                <a href="#my-tours" class="dropdown-item">
+                                    <i class="fas fa-suitcase me-2"></i>My Tours
+                                </a>
+                                <a href="#booking-section" class="dropdown-item">
+                                    <i class="fas fa-plus-circle me-2"></i>Book New Tour
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item text-danger" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">TravelEase Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-tabs">
+                        <button class="modal-tab active" data-tab="login">Login</button>
+                        <button class="modal-tab" data-tab="register">Register</button>
+                    </div>
+                    
+                    <form id="loginForm" style="display: block;">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Sign In</button>
+                    </form>
+                    
+                    <form id="registerForm" style="display: none;">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="regFirstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="regFirstName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="regLastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="regLastName" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="regEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="regPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="regPassword" required minlength="6">
+                        </div>
+                        <div class="mb-3">
+                            <label for="regConfirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="regConfirmPassword" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade booking-modal" id="bookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Complete Your Booking</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="selectedPackageInfo" class="mb-4 p-3 bg-light rounded">
+                    </div>
+                    
+                    <form id="bookingFormModal">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="bookingEmail" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="bookingPhone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Check-in Date</label>
+                                <input type="date" class="form-control" id="bookingCheckin" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Check-out Date</label>
+                                <input type="date" class="form-control" id="bookingCheckout" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Number of Travelers</label>
+                            <div class="traveler-counter">
+                                <button type="button" class="counter-btn" id="modalDecrementTravelers">-</button>
+                                <div class="counter-display">
+                                    <span id="modalTravelerCount">2</span> Travelers
+                                </div>
+                                <button type="button" class="counter-btn" id="modalIncrementTravelers">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Special Requests (Optional)</label>
+                            <textarea class="form-control" id="specialRequests" rows="3" placeholder="Any special requirements or requests..."></textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h5 class="mb-1">Total Amount:</h5>
+                                <div class="package-price" id="modalTotalAmount">₹0</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-credit-card me-2"></i>Proceed to Payment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="payment-summary mb-4">
+                        <h6>Booking Summary</h6>
+                        <div id="paymentBookingDetails"></div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <h5 class="mb-0">Total Amount:</h5>
+                            <div class="package-price" id="paymentTotalAmount">₹0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <div class="payment-method" data-method="upi">
+                            <div class="payment-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h6>UPI</h6>
+                            <small class="text-muted">Pay via UPI Apps</small>
+                        </div>
+                        
+                        <div class="payment-method" data-method="card">
+                            <div class="payment-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <h6>Credit/Debit Card</h6>
+                            <small class="text-muted">Visa, Mastercard, Rupay</small>
+                        </div>
+                        
+                        <div class="payment-method" data-method="netbanking">
+                            <div class="payment-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h6>Net Banking</h6>
+                            <small class="text-muted">All major banks</small>
+                        </div>
+                        
+                        <div class="payment-method" data-method="cash">
+                            <div class="payment-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <h6>Cash on Departure</h6>
+                            <small class="text-muted">Pay at tour start</small>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-details" id="paymentDetails">
+                        <div id="upiDetails" class="payment-method-details">
+                            <h6>Select UPI App</h6>
+                            <div class="upi-apps">
+                                <div class="upi-app" data-app="gpay">
+                                    <i class="fab fa-google-pay fa-2x mb-2" style="color: #4285F4;"></i>
+                                    <div>Google Pay</div>
+                                </div>
+                                <div class="upi-app" data-app="phonepe">
+                                    <i class="fas fa-phone-alt fa-2x mb-2" style="color: #5F259F;"></i>
+                                    <div>PhonePe</div>
+                                </div>
+                                <div class="upi-app" data-app="paytm">
+                                    <i class="fas fa-wallet fa-2x mb-2" style="color: #1BA6DF;"></i>
+                                    <div>Paytm</div>
+                                </div>
+                                <div class="upi-app" data-app="other">
+                                    <i class="fas fa-mobile-alt fa-2x mb-2" style="color: var(--primary);"></i>
+                                    <div>Other UPI</div>
+                                </div>
+                            </div>
+                            <div class="upi-pin-section" id="upiPinSection">
+                                <label class="form-label mt-3">Enter UPI PIN</label>
+                                <div class="card-input-group">
+                                    <input type="password" class="form-control-card" id="upiPin" maxlength="6" placeholder="Enter 6-digit UPI PIN">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="cardDetails" class="payment-method-details" style="display: none;">
+                            <div class="card-input-group">
+                                <div class="card-input">
+                                    <label class="form-label">Card Number</label>
+                                    <input type="text" class="form-control-card" id="cardNumber" maxlength="16" placeholder="1234 5678 9012 3456">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="month" class="form-control-card" id="cardExpiry">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">CVV</label>
+                                    <input type="password" class="form-control-card" id="cardCvv" maxlength="3" placeholder="123">
+                                </div>
+                            </div>
+                            <div class="otp-section" id="cardOtpSection">
+                                <label class="form-label mt-3">Enter OTP</label>
+                                <input type="text" class="form-control-card" id="cardOtp" maxlength="6" placeholder="Enter OTP sent to your mobile">
+                            </div>
+                        </div>
+                        
+                        <div id="netbankingDetails" class="payment-method-details" style="display: none;">
+                            <label class="form-label">Select Bank</label>
+                            <select class="form-select" id="bankSelect">
+                                <option value="">Choose your bank</option>
+                                <option value="sbi">State Bank of India</option>
+                                <option value="hdfc">HDFC Bank</option>
+                                <option value="icici">ICICI Bank</option>
+                                <option value="axis">Axis Bank</option>
+                                <option value="kotak">Kotak Mahindra Bank</option>
+                            </select>
+                        </div>
+                        
+                        <div id="cashDetails" class="payment-method-details" style="display: none;">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                You have selected Cash on Departure. Your booking will be confirmed and you can pay the amount when you start your tour.
+                            </div>
+                            <div class="alert alert-warning mt-3">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Please carry exact cash amount and reach the departure point 30 minutes before scheduled time.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn-pay" id="payNowBtn">
+                        <i class="fas fa-lock me-2"></i>Complete Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero-section" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Discover Incredible India & Beyond</h1>
+                <p class="hero-subtitle">Experience curated travel packages designed for unforgettable journeys. From the Himalayas to tropical beaches, we bring you the best of travel.</p>
+                <a href="#booking-section" class="btn-primary-hero">Book Your Adventure</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="booking-section" id="booking-section">
+        <div class="container">
+            <span class="section-label"><i class="fas fa-calendar-alt me-2"></i>Book Your Adventure</span>
+            <h2 class="section-title">Find Your Perfect Trip</h2>
+            <p class="section-subtitle">Plan your dream vacation with our easy booking system</p>
+            
+            <div class="booking-container">
+                <form id="searchForm">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-map-marker-alt form-icon"></i>Destination
+                                </label>
+                                <select class="form-select" id="destinationSelect" required>
+                                    <option value="" selected disabled>Choose a destination</option>
+                                    <option value="goa">Goa, India</option>
+                                    <option value="kerala">Kerala, India</option>
+                                    <option value="himachal">Himachal Pradesh, India</option>
+                                    <option value="thailand">Thailand</option>
+                                    <option value="maldives">Maldives</option>
+                                    <option value="dubai">Dubai, UAE</option>
+                                    <option value="singapore">Singapore</option>
+                                    <option value="bali">Bali, Indonesia</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-users form-icon"></i>Travelers
+                                </label>
+                                <div class="traveler-counter">
+                                    <button type="button" class="counter-btn" id="decrementTravelers">-</button>
+                                    <div class="counter-display">
+                                        <span id="travelerCount">2</span> Travelers
+                                    </div>
+                                    <button type="button" class="counter-btn" id="incrementTravelers">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-calendar-day form-icon"></i>Travel Dates
+                                </label>
+                                <div class="date-input-group">
+                                    <div class="date-input">
+                                        <input type="date" class="form-control" id="checkinDate" required>
+                                        <small class="text-muted">Check-in</small>
+                                    </div>
+                                    <div class="date-input">
+                                        <input type="date" class="form-control" id="checkoutDate" required>
+                                        <small class="text-muted">Check-out</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-suitcase form-icon"></i>Trip Type
+                                </label>
+                                <select class="form-select" id="tripType">
+                                    <option value="family">Family Vacation</option>
+                                    <option value="honeymoon">Honeymoon</option>
+                                    <option value="adventure">Adventure Trip</option>
+                                    <option value="business">Business Trip</option>
+                                    <option value="solo">Solo Travel</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-search">
+                        <i class="fas fa-search me-2"></i>Search Packages
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="search-results-section" id="search-results">
+        <div class="container">
+            <div class="search-results-header">
+                <div>
+                    <h2 class="section-title mb-0">Available Packages</h2>
+                    <p class="results-count" id="resultsCount">Found 0 packages</p>
+                </div>
+                <div class="filter-options">
+                    <button class="filter-btn active" data-filter="all">All Packages</button>
+                    <button class="filter-btn" data-filter="family">Family</button>
+                    <button class="filter-btn" data-filter="honeymoon">Honeymoon</button>
+                    <button class="filter-btn" data-filter="adventure">Adventure</button>
+                    <button class="filter-btn" data-filter="budget">Budget Friendly</button>
+                </div>
+            </div>
+            
+            <div class="row" id="searchResultsGrid">
+            </div>
+        </div>
+    </section>
+
+    <section class="destinations-section" id="destinations">
+        <div class="container">
+            <h2 class="section-title">Popular Destinations</h2>
+            <p class="section-subtitle">Discover our most sought-after travel destinations across India and the world</p>
+            
+            <div class="row" id="destinationsGrid">
+            </div>
+        </div>
+    </section>
+
+    <section class="my-tours-section" id="my-tours">
+        <div class="container">
+            <h2 class="section-title">My Tours</h2>
+            <p class="section-subtitle">Manage your upcoming, current, and past tours</p>
+            
+            <div class="tabs-navigation">
+                <button class="tab-btn active" data-tab="upcoming">Upcoming Tours</button>
+                <button class="tab-btn" data-tab="current">Current Tours</button>
+                <button class="tab-btn" data-tab="past">Past Tours</button>
+            </div>
+            
+            <div id="toursContent">
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h4 class="footer-title"><i class="fas fa-plane-departure me-2"></i>TravelEase</h4>
+                    <p class="text-muted">Your trusted partner for unforgettable travel experiences worldwide. Making dream destinations accessible to everyone.</p>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#booking-section">Book Now</a></li>
+                        <li><a href="#destinations">Destinations</a></li>
+                        <li><a href="#my-tours">My Tours</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">Contact Us</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone me-2"></i> +91 98765 43210</li>
+                        <li><i class="fas fa-envelope me-2"></i> support@travelease.in</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Mumbai, India</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">Business Hours</h5>
+                    <ul class="footer-links">
+                        <li>Monday - Friday: 9AM - 8PM</li>
+                        <li>Saturday: 10AM - 6PM</li>
+                        <li>Sunday: 10AM - 4PM</li>
+                        <li>24/7 Emergency Support</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TravelEase India. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        class AuthSystem {
+            constructor() {
+                this.currentUser = null;
+                this.init();
+            }
+
+            init() {
+                this.users = JSON.parse(localStorage.getItem('travelEaseUsers')) || [];
+                this.bookings = JSON.parse(localStorage.getItem('travelEaseBookings')) || [];
+                
+                const loggedInUser = localStorage.getItem('travelEaseCurrentUser');
+                if (loggedInUser) {
+                    this.currentUser = JSON.parse(loggedInUser);
+                    this.updateUI();
+                    this.loadUserTours();
+                }
+            }
+
+            register(firstName, lastName, email, phone, password, confirmPassword) {
+                if (!this.isValidEmail(email)) {
+                    return { success: false, message: 'Please enter a valid email address' };
+                }
+
+                if (password.length < 6) {
+                    return { success: false, message: 'Password must be at least 6 characters' };
+                }
+
+                if (password !== confirmPassword) {
+                    return { success: false, message: 'Passwords do not match' };
+                }
+
+                if (this.users.find(u => u.email === email)) {
+                    return { success: false, message: 'Email already registered' };
+                }
+
+                const user = {
+                    id: Date.now(),
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    phone: phone,
+                    password: this.hashPassword(password),
+                    joinDate: new Date().toISOString(),
+                    bookings: []
+                };
+                
+                this.users.push(user);
+                localStorage.setItem('travelEaseUsers', JSON.stringify(this.users));
+                
+                this.currentUser = user;
+                localStorage.setItem('travelEaseCurrentUser', JSON.stringify(user));
+                
+                this.loadUserTours();
+                
+                return { success: true, user: user };
+            }
+
+            login(email, password) {
+                if (!this.isValidEmail(email)) {
+                    return { success: false, message: 'Please enter a valid email address' };
+                }
+
+                if (password.length < 6) {
+                    return { success: false, message: 'Password must be at least 6 characters' };
+                }
+
+                const user = this.users.find(u => u.email === email);
+                
+                if (!user) {
+                    return { success: false, message: 'Email not registered. Please register first.' };
+                }
+
+                if (this.hashPassword(password) !== user.password) {
+                    return { success: false, message: 'Incorrect password' };
+                }
+
+                this.currentUser = user;
+                localStorage.setItem('travelEaseCurrentUser', JSON.stringify(user));
+                
+                this.loadUserTours();
+                
+                return { success: true, user: user };
+            }
+
+            logout() {
+                this.currentUser = null;
+                localStorage.removeItem('travelEaseCurrentUser');
+                this.updateUI();
+            }
+
+            isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            hashPassword(password) {
+                return btoa(password);
+            }
+
+            updateUI() {
+                const loginButtonContainer = document.getElementById('loginButtonContainer');
+                const userMenuContainer = document.getElementById('userMenuContainer');
+                const myToursNavItem = document.getElementById('myToursNavItem');
+                const userAvatar = document.getElementById('userAvatar');
+
+                if (this.currentUser) {
+                    loginButtonContainer.style.display = 'none';
+                    userMenuContainer.style.display = 'block';
+                    myToursNavItem.style.display = 'block';
+                    userAvatar.textContent = this.currentUser.firstName.charAt(0).toUpperCase();
+                    userAvatar.title = `${this.currentUser.firstName} ${this.currentUser.lastName}`;
+                } else {
+                    loginButtonContainer.style.display = 'block';
+                    userMenuContainer.style.display = 'none';
+                    myToursNavItem.style.display = 'none';
+                }
+            }
+
+            addBooking(booking) {
+                if (!this.currentUser) {
+                    return { success: false, message: 'Please login to book' };
+                }
+
+                const bookingId = `TEB${Date.now()}${Math.floor(Math.random() * 1000)}`;
+                
+                const newBooking = {
+                    id: bookingId,
+                    userId: this.currentUser.id,
+                    userEmail: this.currentUser.email,
+                    destinationId: booking.destinationId,
+                    destinationName: booking.destinationName,
+                    destinationImage: booking.destinationImage,
+                    destinationCountry: booking.destinationCountry,
+                    checkinDate: booking.checkinDate,
+                    checkoutDate: booking.checkoutDate,
+                    travelers: booking.travelers,
+                    totalAmount: booking.totalAmount,
+                    firstName: booking.firstName,
+                    lastName: booking.lastName,
+                    email: booking.email,
+                    phone: booking.phone,
+                    specialRequests: booking.specialRequests,
+                    tripType: booking.tripType,
+                    bookingDate: new Date().toISOString(),
+                    paymentMethod: booking.paymentMethod,
+                    paymentStatus: booking.paymentMethod === 'cash' ? 'pending' : 'completed',
+                    status: 'confirmed',
+                    bookingNumber: `BOOK-${Date.now()}-${Math.floor(Math.random() * 10000)}`
+                };
+                
+                this.bookings.push(newBooking);
+                localStorage.setItem('travelEaseBookings', JSON.stringify(this.bookings));
+                
+                this.loadUserTours();
+                
+                return { success: true, booking: newBooking };
+            }
+
+            getUserBookings() {
+                if (!this.currentUser) return [];
+                return this.bookings.filter(booking => booking.userId === this.currentUser.id);
+            }
+
+            loadUserTours() {
+                if (!this.currentUser) return;
+                
+                const userBookings = this.getUserBookings();
+                const now = new Date();
+                
+                const upcomingTours = userBookings.filter(booking => {
+                    const tourStart = new Date(booking.checkinDate);
+                    return tourStart > now;
+                });
+                
+                const currentTours = userBookings.filter(booking => {
+                    const tourStart = new Date(booking.checkinDate);
+                    const tourEnd = new Date(booking.checkoutDate);
+                    return tourStart <= now && tourEnd >= now;
+                });
+                
+                const pastTours = userBookings.filter(booking => {
+                    const tourEnd = new Date(booking.checkoutDate);
+                    return tourEnd < now;
+                });
+                
+                window.userTours = {
+                    upcoming: upcomingTours,
+                    current: currentTours,
+                    past: pastTours
+                };
+                
+                if (window.location.hash === '#my-tours') {
+                    renderTours('upcoming');
+                }
+            }
+        }
+
+        const auth = new AuthSystem();
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        document.querySelectorAll('.modal-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (tabName === 'login') {
+                    document.getElementById('loginForm').style.display = 'block';
+                    document.getElementById('registerForm').style.display = 'none';
+                } else {
+                    document.getElementById('loginForm').style.display = 'none';
+                    document.getElementById('registerForm').style.display = 'block';
+                }
+            });
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('regFirstName').value;
+            const lastName = document.getElementById('regLastName').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            const result = auth.register(firstName, lastName, email, phone, password, confirmPassword);
+            if (result.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('authModal'));
+                modal.hide();
+                showNotification(`Welcome to TravelEase, ${result.user.firstName}!`, 'success');
+                this.reset();
+            } else {
+                showNotification(result.message, 'error');
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const result = auth.login(email, password);
+            if (result.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('authModal'));
+                modal.hide();
+                showNotification(`Welcome back, ${result.user.firstName}!`, 'success');
+                this.reset();
+            } else {
+                showNotification(result.message, 'error');
+            }
+        });
+
+        document.getElementById('userAvatar').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('userDropdown').classList.toggle('show');
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            auth.logout();
+            showNotification('You have been logged out', 'info');
+            document.getElementById('userDropdown').classList.remove('show');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.profile-dropdown')) {
+                document.getElementById('userDropdown').classList.remove('show');
+            }
+        });
+
+        const today = new Date().toISOString().split('T')[0];
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        const nextMonthStr = nextMonth.toISOString().split('T')[0];
+
+        document.getElementById('checkinDate').min = today;
+        document.getElementById('checkinDate').value = today;
+        document.getElementById('checkoutDate').min = today;
+        document.getElementById('checkoutDate').value = nextMonthStr;
+
+        let travelerCount = 2;
+        
+        document.getElementById('incrementTravelers').addEventListener('click', function() {
+            if (travelerCount < 10) {
+                travelerCount++;
+                document.getElementById('travelerCount').textContent = travelerCount;
+            }
+        });
+
+        document.getElementById('decrementTravelers').addEventListener('click', function() {
+            if (travelerCount > 1) {
+                travelerCount--;
+                document.getElementById('travelerCount').textContent = travelerCount;
+            }
+        });
+
+        let modalTravelerCount = 2;
+        
+        document.getElementById('modalIncrementTravelers').addEventListener('click', function() {
+            if (modalTravelerCount < 10) {
+                modalTravelerCount++;
+                document.getElementById('modalTravelerCount').textContent = modalTravelerCount;
+                updateModalTotal();
+            }
+        });
+
+        document.getElementById('modalDecrementTravelers').addEventListener('click', function() {
+            if (modalTravelerCount > 1) {
+                modalTravelerCount--;
+                document.getElementById('modalTravelerCount').textContent = modalTravelerCount;
+                updateModalTotal();
+            }
+        });
+
+        const tourPackages = [
+            { 
+                id: 1,
+                name: "Goa Beach Paradise", 
+                image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                price: 19999, 
+                duration: "5 days",
+                description: "Beautiful beaches, Portuguese heritage, and vibrant nightlife",
+                destination: "Goa, India",
+                country: "India",
+                tripTypes: ["family", "honeymoon", "adventure"],
+                features: ["Beach View", "Free Breakfast", "Swimming Pool", "Spa"],
+                popular: true
+            },
+            { 
+                id: 2,
+                name: "Kerala Backwaters Retreat", 
+                image: "https://images.unsplash.com/photo-1528164344705-47542687000d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                price: 24999, 
+                duration: "7 days",
+                description: "Backwaters, hill stations, and Ayurvedic wellness",
+                destination: "Kerala, India",
+                country: "India",
+                tripTypes: ["family", "honeymoon"],
+                features: ["Houseboat Stay", "Ayurvedic Spa", "Nature Walk", "Cultural Show"],
+                popular: true
+            },
+            { 
+                id: 3,
+                name: "Himalayan Adventure", 
+                image: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                price: 17999, 
+                duration: "6 days",
+                description: "Majestic Himalayas, adventure sports, and Tibetan culture",
+                destination: "Himachal Pradesh",
+                country: "India",
+                tripTypes: ["adventure", "solo"],
+                features: ["Trekking", "Camping", "River Rafting", "Cultural Tour"],
+                popular: false
+            },
+            { 
+                id: 4,
+                name: "Thai Tropical Getaway", 
+                image: "https://images.unsplash.com/photo-1528181304800-259b08848526?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                price: 34999, 
+                duration: "7 days",
+                description: "Tropical beaches, temples, and vibrant street food",
+                destination: "Thailand",
+                country: "Thailand",
+                tripTypes: ["family", "honeymoon", "adventure"],
+                features: ["Island Hopping", "Temple Tours", "Thai Massage", "Street Food Tour"],
+                popular: true
+            },
+            { 
+                id: 5,
+                name: "Maldives Luxury Escape", 
+                image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                price: 69999, 
+                duration: "5 days",
+                description: "Luxurious overwater villas and crystal clear waters",
+                destination: "Maldives",
+                country: "Maldives",
+                tripTypes: ["honeymoon", "family"],
+                features: ["Overwater Villa", "Private Pool", "Snorkeling", "Sunset Cruise"],
+                popular: true
+            },
+            { 
+                id: 6,
+                name: "Dubai Luxury Experience", 
+                image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                price: 44999, 
+                duration: "5 days",
+                description: "Modern architecture, desert safaris, and luxury shopping",
+                destination: "Dubai, UAE",
+                country: "UAE",
+                tripTypes: ["family", "business", "adventure"],
+                features: ["Burj Khalifa", "Desert Safari", "Shopping Tour", "Luxury Hotel"],
+                popular: false
+            },
+            { 
+                id: 7,
+                name: "Singapore City Tour", 
+                image: "https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                price: 38999, 
+                duration: "4 days",
+                description: "Modern city, Gardens by the Bay, and Sentosa Island",
+                destination: "Singapore",
+                country: "Singapore",
+                tripTypes: ["family", "business"],
+                features: ["Marina Bay Sands", "Universal Studios", "Gardens by Bay", "Night Safari"],
+                popular: true
+            },
+            { 
+                id: 8,
+                name: "Bali Spiritual Retreat", 
+                image: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                price: 31999, 
+                duration: "6 days",
+                description: "Temples, rice terraces, and spiritual wellness",
+                destination: "Bali, Indonesia",
+                country: "Indonesia",
+                tripTypes: ["honeymoon", "solo", "adventure"],
+                features: ["Temple Visits", "Rice Terrace Trek", "Spa Retreat", "Cultural Dance"],
+                popular: true
+            }
+        ];
+
+        function loadDestinations() {
+            const container = document.getElementById('destinationsGrid');
+            container.innerHTML = '';
+            
+            tourPackages.forEach(package => {
+                const col = document.createElement('div');
+                col.className = 'col-lg-4 col-md-6';
+                
+                col.innerHTML = `
+                    <div class="destination-card">
+                        ${package.popular ? '<div class="badge-popular">Popular</div>' : ''}
+                        <img src="${package.image}" alt="${package.name}" class="destination-image">
+                        <div class="destination-info">
+                            <h4 class="destination-title">${package.name}</h4>
+                            <div class="destination-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${package.duration} • ${package.country}
+                            </div>
+                            <p class="text-muted mb-3">${package.description}</p>
+                            <div class="destination-price mb-3">
+                                <span class="rupee-symbol">₹</span>${package.price.toLocaleString('en-IN')}
+                                <small class="text-muted ms-2">per person</small>
+                            </div>
+                            <button class="btn-book" data-package-id="${package.id}">
+                                <i class="fas fa-calendar-check me-2"></i>Book Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(col);
+            });
+            
+            document.querySelectorAll('.btn-book').forEach(button => {
+                button.addEventListener('click', function() {
+                    const packageId = parseInt(this.getAttribute('data-package-id'));
+                    if (!auth.currentUser) {
+                        showNotification('Please login/register to book packages', 'error');
+                        const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+                        authModal.show();
+                    } else {
+                        openBookingModal(packageId);
+                    }
+                });
+            });
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const selectedDestination = document.getElementById('destinationSelect').value;
+            const checkinDate = document.getElementById('checkinDate').value;
+            const checkoutDate = document.getElementById('checkoutDate').value;
+            const travelers = travelerCount;
+            const tripType = document.getElementById('tripType').value;
+            
+            if (!selectedDestination) {
+                showNotification('Please select a destination', 'error');
+                return;
+            }
+            
+            if (!checkinDate || !checkoutDate) {
+                showNotification('Please select travel dates', 'error');
+                return;
+            }
+            
+            let filteredPackages = tourPackages.filter(pkg => {
+                const destinationMatch = selectedDestination === 'all' || 
+                    pkg.destination.toLowerCase().includes(selectedDestination.toLowerCase()) ||
+                    pkg.country.toLowerCase().includes(selectedDestination.toLowerCase());
+                
+                const typeMatch = tripType === 'all' || pkg.tripTypes.includes(tripType);
+                
+                return destinationMatch && typeMatch;
+            });
+            
+            showSearchResults(filteredPackages, selectedDestination, travelers, tripType);
+            
+            document.getElementById('search-results').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function showSearchResults(packages, destination, travelers, tripType) {
+            const resultsSection = document.getElementById('search-results');
+            const resultsGrid = document.getElementById('searchResultsGrid');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            resultsSection.style.display = 'block';
+            
+            resultsCount.textContent = `Found ${packages.length} packages for ${destination || 'your search'}`;
+            
+            resultsGrid.innerHTML = '';
+            
+            if (packages.length === 0) {
+                resultsGrid.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h4>No packages found</h4>
+                        <p class="text-muted">Try adjusting your search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            packages.forEach(pkg => {
+                const col = document.createElement('div');
+                col.className = 'col-lg-4 col-md-6';
+                
+                const totalPrice = pkg.price * travelers;
+                
+                col.innerHTML = `
+                    <div class="result-card">
+                        ${pkg.popular ? '<div class="badge-popular">Popular</div>' : ''}
+                        <img src="${pkg.image}" alt="${pkg.name}" class="result-image">
+                        <div class="result-info">
+                            <h4 class="result-title">${pkg.name}</h4>
+                            <div class="result-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${pkg.duration} • ${pkg.country}
+                            </div>
+                            <p class="text-muted mb-3">${pkg.description}</p>
+                            
+                            <div class="result-features">
+                                ${pkg.tripTypes.map(type => 
+                                    `<span class="feature-badge">${type.charAt(0).toUpperCase() + type.slice(1)}</span>`
+                                ).join('')}
+                                ${pkg.features.slice(0, 2).map(feature => 
+                                    `<span class="feature-badge">${feature}</span>`
+                                ).join('')}
+                            </div>
+                            
+                            <div class="result-price mb-3">
+                                <span class="rupee-symbol">₹</span>${pkg.price.toLocaleString('en-IN')}
+                                <small class="text-muted ms-2">per person</small>
+                                <div class="text-success small mt-1">Total for ${travelers} travelers: ₹${totalPrice.toLocaleString('en-IN')}</div>
+                            </div>
+                            <button class="btn-book-result" data-package-id="${pkg.id}" data-travelers="${travelers}">
+                                <i class="fas fa-calendar-check me-2"></i>Book This Package
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                resultsGrid.appendChild(col);
+            });
+            
+            document.querySelectorAll('.btn-book-result').forEach(button => {
+                button.addEventListener('click', function() {
+                    const packageId = parseInt(this.getAttribute('data-package-id'));
+                    const travelers = parseInt(this.getAttribute('data-travelers'));
+                    
+                    if (!auth.currentUser) {
+                        showNotification('Please login/register to book packages', 'error');
+                        const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+                        authModal.show();
+                    } else {
+                        travelerCount = travelers;
+                        document.getElementById('travelerCount').textContent = travelers;
+                        openBookingModal(packageId);
+                    }
+                });
+            });
+        }
+
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                filterSearchResults(filter);
+            });
+        });
+
+        function filterSearchResults(filter) {
+            const resultsGrid = document.getElementById('searchResultsGrid');
+            const allResultCards = resultsGrid.querySelectorAll('.result-card');
+            
+            allResultCards.forEach(card => {
+                const packageId = parseInt(card.querySelector('.btn-book-result').getAttribute('data-package-id'));
+                const pkg = tourPackages.find(p => p.id === packageId);
+                
+                if (filter === 'all' || 
+                    (filter === 'budget' && pkg.price <= 25000) ||
+                    pkg.tripTypes.includes(filter)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        let selectedPackage = null;
+        let currentBookingData = null;
+
+        function openBookingModal(packageId) {
+            selectedPackage = tourPackages.find(p => p.id === packageId);
+            if (!selectedPackage) return;
+            
+            const modal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            
+            document.getElementById('selectedPackageInfo').innerHTML = `
+                <h5>${selectedPackage.name}</h5>
+                <p class="mb-1">${selectedPackage.duration} • ${selectedPackage.country}</p>
+                <p class="mb-1">${selectedPackage.description}</p>
+                <div class="package-price mt-2">
+                    <span class="rupee-symbol">₹</span>${selectedPackage.price.toLocaleString('en-IN')} per person
+                </div>
+            `;
+            
+            const checkinDate = document.getElementById('checkinDate').value;
+            const checkoutDate = document.getElementById('checkoutDate').value;
+            
+            document.getElementById('bookingCheckin').value = checkinDate;
+            document.getElementById('bookingCheckin').min = today;
+            document.getElementById('bookingCheckout').value = checkoutDate;
+            document.getElementById('bookingCheckout').min = checkinDate;
+            
+            modalTravelerCount = travelerCount;
+            document.getElementById('modalTravelerCount').textContent = modalTravelerCount;
+            
+            updateModalTotal();
+            
+            if (auth.currentUser) {
+                document.getElementById('firstName').value = auth.currentUser.firstName;
+                document.getElementById('lastName').value = auth.currentUser.lastName || '';
+                document.getElementById('bookingEmail').value = auth.currentUser.email;
+                document.getElementById('bookingPhone').value = auth.currentUser.phone || '';
+            }
+            
+            modal.show();
+        }
+
+        function updateModalTotal() {
+            if (!selectedPackage) return;
+            const total = selectedPackage.price * modalTravelerCount;
+            document.getElementById('modalTotalAmount').innerHTML = 
+                `<span class="rupee-symbol">₹</span>${total.toLocaleString('en-IN')}`;
+        }
+
+        document.getElementById('bookingFormModal').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!auth.currentUser) {
+                showNotification('Please login to complete booking', 'error');
+                return;
+            }
+            
+            currentBookingData = {
+                destinationId: selectedPackage.id,
+                destinationName: selectedPackage.name,
+                destinationImage: selectedPackage.image,
+                destinationCountry: selectedPackage.country,
+                checkinDate: document.getElementById('bookingCheckin').value,
+                checkoutDate: document.getElementById('bookingCheckout').value,
+                travelers: modalTravelerCount,
+                totalAmount: selectedPackage.price * modalTravelerCount,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('bookingEmail').value,
+                phone: document.getElementById('bookingPhone').value,
+                specialRequests: document.getElementById('specialRequests').value,
+                tripType: document.getElementById('tripType').value
+            };
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
+            modal.hide();
+            
+            openPaymentModal();
+        });
+
+        function openPaymentModal() {
+            const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            
+            document.getElementById('paymentBookingDetails').innerHTML = `
+                <p class="mb-1"><strong>${currentBookingData.destinationName}</strong></p>
+                <p class="mb-1">${currentBookingData.destinationCountry}</p>
+                <p class="mb-1">${currentBookingData.travelers} Travelers • ${currentBookingData.tripType}</p>
+                <p class="mb-1">${currentBookingData.checkinDate} to ${currentBookingData.checkoutDate}</p>
+            `;
+            
+            document.getElementById('paymentTotalAmount').innerHTML = 
+                `<span class="rupee-symbol">₹</span>${currentBookingData.totalAmount.toLocaleString('en-IN')}`;
+            
+            modal.show();
+        }
+
+        let selectedPaymentMethod = null;
+        let selectedUpiApp = null;
+
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function() {
+                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                selectedPaymentMethod = this.getAttribute('data-method');
+                
+                document.getElementById('paymentDetails').style.display = 'block';
+                document.querySelectorAll('.payment-method-details').forEach(detail => {
+                    detail.style.display = 'none';
+                });
+                
+                document.getElementById(`${selectedPaymentMethod}Details`).style.display = 'block';
+                document.getElementById('upiPinSection').style.display = 'none';
+                document.getElementById('cardOtpSection').style.display = 'none';
+                
+                if (selectedPaymentMethod === 'cash') {
+                    document.getElementById('payNowBtn').innerHTML = '<i class="fas fa-calendar-check me-2"></i>Confirm Booking (Pay Later)';
+                } else {
+                    document.getElementById('payNowBtn').innerHTML = '<i class="fas fa-lock me-2"></i>Complete Payment';
+                }
+            });
+        });
+
+        document.querySelectorAll('.upi-app').forEach(app => {
+            app.addEventListener('click', function() {
+                document.querySelectorAll('.upi-app').forEach(a => a.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedUpiApp = this.getAttribute('data-app');
+                
+                if (selectedUpiApp !== 'other') {
+                    document.getElementById('upiPinSection').style.display = 'block';
+                }
+            });
+        });
+
+        document.getElementById('payNowBtn').addEventListener('click', function() {
+            if (!selectedPaymentMethod) {
+                showNotification('Please select a payment method', 'error');
+                return;
+            }
+            
+            if (selectedPaymentMethod === 'upi') {
+                if (!selectedUpiApp) {
+                    showNotification('Please select a UPI app', 'error');
+                    return;
+                }
+                
+                if (selectedUpiApp !== 'other' && !document.getElementById('upiPin').value) {
+                    showNotification('Please enter UPI PIN', 'error');
+                    return;
+                }
+                
+                simulateUpiPayment();
+                
+            } else if (selectedPaymentMethod === 'card') {
+                if (!document.getElementById('cardNumber').value || 
+                    !document.getElementById('cardExpiry').value || 
+                    !document.getElementById('cardCvv').value) {
+                    showNotification('Please fill all card details', 'error');
+                    return;
+                }
+                
+                document.getElementById('cardOtpSection').style.display = 'block';
+                
+                if (document.getElementById('cardOtp').value) {
+                    simulateCardPayment();
+                } else {
+                    showNotification('OTP sent to your registered mobile', 'info');
+                    setTimeout(() => {
+                        document.getElementById('cardOtp').value = '123456';
+                        showNotification('OTP auto-filled for demo: 123456', 'info');
+                    }, 1000);
+                }
+                
+            } else if (selectedPaymentMethod === 'netbanking') {
+                if (!document.getElementById('bankSelect').value) {
+                    showNotification('Please select a bank', 'error');
+                    return;
+                }
+                
+                simulateNetBanking();
+                
+            } else if (selectedPaymentMethod === 'cash') {
+                completeCashBooking();
+            }
+        });
+
+        function simulateUpiPayment() {
+            showNotification('Opening UPI app for payment...', 'info');
+            
+            setTimeout(() => {
+                showNotification('Payment successful!', 'success');
+                completeBooking('upi');
+            }, 2000);
+        }
+
+        function simulateCardPayment() {
+            const otp = document.getElementById('cardOtp').value;
+            if (otp !== '123456') {
+                showNotification('Invalid OTP. Please try again.', 'error');
+                return;
+            }
+            
+            showNotification('Processing card payment...', 'info');
+            
+            setTimeout(() => {
+                showNotification('Payment successful!', 'success');
+                completeBooking('card');
+            }, 2000);
+        }
+
+        function simulateNetBanking() {
+            showNotification('Redirecting to bank portal...', 'info');
+            
+            setTimeout(() => {
+                showNotification('Payment successful!', 'success');
+                completeBooking('netbanking');
+            }, 2000);
+        }
+
+        function completeCashBooking() {
+            currentBookingData.paymentMethod = 'cash';
+            
+            const result = auth.addBooking(currentBookingData);
+            
+            if (result.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                modal.hide();
+                
+                showNotification(`Booking confirmed! You will pay ₹${currentBookingData.totalAmount.toLocaleString('en-IN')} at tour departure. Booking ID: ${result.booking.bookingNumber}`, 'success');
+                
+                window.location.hash = '#my-tours';
+                renderTours('upcoming');
+            }
+        }
+
+        function completeBooking(paymentMethod) {
+            currentBookingData.paymentMethod = paymentMethod;
+            
+            const result = auth.addBooking(currentBookingData);
+            
+            if (result.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                modal.hide();
+                
+                showNotification(`Payment successful! Booking confirmed for ${currentBookingData.destinationName}. Booking ID: ${result.booking.bookingNumber}`, 'success');
+                
+                window.location.hash = '#my-tours';
+                renderTours('upcoming');
+            }
+        }
+
+        function renderTours(tab) {
+            if (!auth.currentUser) {
+                document.getElementById('toursContent').innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-user-lock fa-3x text-muted mb-3"></i>
+                        <h4>Please login to view your tours</h4>
+                        <p class="text-muted">Login to see your upcoming, current, and past tours</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#authModal">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login Now
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            const tours = window.userTours || { upcoming: [], current: [], past: [] };
+            const toursList = tours[tab] || [];
+            
+            let content = '';
+            
+            if (toursList.length === 0) {
+                content = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                        <h4>No ${tab} tours found</h4>
+                        <p class="text-muted">You don't have any ${tab} tours booked yet.</p>
+                        ${tab === 'upcoming' ? '<a href="#booking-section" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Book a Tour</a>' : ''}
+                    </div>
+                `;
+            } else {
+                toursList.forEach(tour => {
+                    const startDate = new Date(tour.checkinDate).toLocaleDateString('en-IN', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    });
+                    const endDate = new Date(tour.checkoutDate).toLocaleDateString('en-IN', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    });
+                    const bookingDate = new Date(tour.bookingDate).toLocaleDateString('en-IN', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    });
+                    
+                    const paymentStatusBadge = tour.paymentStatus === 'completed' ? 
+                        '<span class="badge bg-success ms-2">Paid</span>' : 
+                        '<span class="badge bg-warning ms-2">Pending</span>';
+                    
+                    content += `
+                        <div class="tour-card ${tab}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="tour-status status-${tab}">
+                                        ${tab === 'upcoming' ? 'Upcoming' : tab === 'current' ? 'In Progress' : 'Completed'}
+                                    </span>
+                                    <h4 class="mb-2">${tour.destinationName} ${paymentStatusBadge}</h4>
+                                    <p class="text-muted mb-2">
+                                        <i class="fas fa-map-marker-alt me-1"></i>${tour.destinationCountry} 
+                                        • <i class="fas fa-users me-1 ms-2"></i>${tour.travelers} Travelers
+                                        • <i class="fas fa-credit-card me-1 ms-2"></i>${tour.paymentMethod}
+                                    </p>
+                                    <p class="mb-2"><i class="fas fa-calendar-alt me-2"></i>${startDate} - ${endDate}</p>
+                                    <p class="mb-2"><i class="fas fa-user me-2"></i>${tour.firstName} ${tour.lastName}</p>
+                                    <p class="mb-2"><i class="fas fa-receipt me-2"></i>Booking ID: ${tour.bookingNumber}</p>
+                                    ${tour.specialRequests ? `<p class="mb-2"><i class="fas fa-sticky-note me-2"></i>${tour.specialRequests}</p>` : ''}
+                                </div>
+                                <div class="text-end">
+                                    <div class="package-price mb-2">
+                                        <span class="rupee-symbol">₹</span>${tour.totalAmount.toLocaleString('en-IN')}
+                                    </div>
+                                    <small class="text-muted">Booked on ${bookingDate}</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('toursContent').innerHTML = content;
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                const tab = this.getAttribute('data-tab');
+                renderTours(tab);
+            });
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    if (targetId === '#my-tours') {
+                        setTimeout(() => {
+                            if (!auth.currentUser) {
+                                const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+                                authModal.show();
+                            } else {
+                                renderTours('upcoming');
+                            }
+                        }, 500);
+                    }
+                }
+            });
+        });
+
+        loadDestinations();
+        
+        document.getElementById('checkinDate').addEventListener('change', function() {
+            document.getElementById('checkoutDate').min = this.value;
+            if (document.getElementById('checkoutDate').value < this.value) {
+                document.getElementById('checkoutDate').value = this.value;
+            }
+        });
+
+        document.getElementById('bookingCheckin').addEventListener('change', function() {
+            document.getElementById('bookingCheckout').min = this.value;
+            if (document.getElementById('bookingCheckout').value < this.value) {
+                document.getElementById('bookingCheckout').value = this.value;
+            }
+        });
+
+        window.addEventListener('load', function() {
+            if (window.location.hash === '#my-tours') {
+                setTimeout(() => {
+                    if (!auth.currentUser) {
+                        const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+                        authModal.show();
+                    } else {
+                        renderTours('upcoming');
+                    }
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
